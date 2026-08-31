@@ -10,7 +10,7 @@ export class GastosService {
     return this.gastosRepository.create(data);
   }
 
-  async getGastosDoMes() {
-    return this.gastosRepository.getGastosDoMes();
+  async getGastosDoMes(usuarioId: string) {
+    return this.gastosRepository.getGastosDoMes(usuarioId);
   }
 }

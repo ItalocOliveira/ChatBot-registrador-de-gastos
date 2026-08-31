@@ -21,5 +21,20 @@ model Gasto {
 
   createdAt DateTime @default(now())
 
+  usuarioId String
+  usuario Usuario @relation(fields: [usuarioId], references: [id])
+
   @@map("gastos")
-} 
+}
+
+model Usuario {
+
+  id String @id @unique @default(uuid())
+
+  numero String @unique
+  nome String?
+
+  gastos Gasto[]
+
+  @@map("usuarios")
+}

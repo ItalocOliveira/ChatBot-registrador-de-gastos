@@ -12,13 +12,14 @@ export class GastosRepository implements IGastosRepository {
         valor: data.valor,
         categoria: data.categoria,
         descricao: data.descricao,
+        usuarioId: data.usuarioId,
       },
     });
 
     return result;
   }
 
-  async getGastosDoMes(): Promise<Gasto[]> {
+  async getGastosDoMes(usuarioId: string): Promise<Gasto[]> {
     // Obter a data atual
     const agora = new Date();
 
@@ -34,6 +35,7 @@ export class GastosRepository implements IGastosRepository {
 
     const gastos = await prisma.gasto.findMany({
       where: {
+        usuarioId,
         createdAt: {
           gte: inicioDoMes,
           lt: inicioDoProximoMes,
