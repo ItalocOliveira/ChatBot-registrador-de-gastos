@@ -4,10 +4,16 @@ import { GastosService } from "./services/gastos.service";
 import { GastosRepository } from "./repositories/gastos.repositories";
 import { UsuariosService } from "./services/usuarios.service";
 import { UsuariosRepository } from "./repositories/usuarios.repositories";
+import { MensagensService } from "./services/mensagens.service";
+import { MensagensRepository } from "./repositories/mensagens.repositories";
+import { SugestoesService } from "./services/sugestoes.service";
+import { SugestoesRepository } from "./repositories/sugestoes.repositories";
 import { handleMessage } from "./handlers/mensagem.handler";
 
 const gastosService = new GastosService(new GastosRepository());
 const usuariosService = new UsuariosService(new UsuariosRepository());
+const mensagensService = new MensagensService(new MensagensRepository());
+const sugestoesService = new SugestoesService(new SugestoesRepository());
 
 create({
   session: process.env.WPP_SESSION || "default",
@@ -22,6 +28,11 @@ async function start(client: Whatsapp): Promise<void> {
   console.log("\n\n\nCliente iniciado! Escaneie o QR Code com seu celular.");
 
   client.onMessage((message: Message) =>
-    handleMessage(client, message, { gastosService, usuariosService }),
+    handleMessage(client, message, {
+      gastosService,
+      usuariosService,
+      mensagensService,
+      sugestoesService,
+    }),
   );
 }

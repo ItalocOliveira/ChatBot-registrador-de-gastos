@@ -38,3 +38,29 @@ model Usuario {
 
   @@map("usuarios")
 }
+
+model Mensagem {
+  id String @id @unique @default(uuid())
+
+  numero String
+  nome String?
+  texto String
+  tipo String?
+
+  createdAt DateTime @default(now())
+
+  @@map("mensagens")
+}
+
+model Sugestao {
+  id String @id @unique @default(uuid())
+
+  numero String
+  nome String?
+  texto String
+
+  createdAt DateTime @default(now())
+
+  @@map("sugestoes")
+}
+

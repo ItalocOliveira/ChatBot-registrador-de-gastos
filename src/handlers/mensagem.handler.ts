@@ -2,17 +2,26 @@ import { Whatsapp, Message } from "@wppconnect-team/wppconnect";
 import { extrairGasto } from "../services/extracaoGasto.service";
 import { GastosService } from "../services/gastos.service";
 import { UsuariosService } from "../services/usuarios.service";
+import { MensagensService } from "../services/mensagens.service";
+import { SugestoesService } from "../services/sugestoes.service";
 import { sortearResposta } from "../config/respostas";
 
 interface MensagemHandlerDeps {
   gastosService: GastosService;
   usuariosService: UsuariosService;
+  mensagensService: MensagensService;
+  sugestoesService: SugestoesService;
 }
 
 export async function handleMessage(
   client: Whatsapp,
   message: Message,
-  { gastosService, usuariosService }: MensagemHandlerDeps,
+  {
+    gastosService,
+    usuariosService,
+    mensagensService,
+    sugestoesService,
+  }: MensagemHandlerDeps,
 ): Promise<void> {
   // Ignora mensagens de grupo ou vazias
   if (message.isGroupMsg || !message.body) return;
@@ -53,6 +62,19 @@ export async function handleMessage(
 
     const resultado = await extrairGasto(message.body);
 
+    // Estoque de mensagens pra curadoria manual futura (ver AGENTS.md).
+    // Não deve derrubar o fluxo principal se falhar.
+    mensagensService
+      .create({
+        numero: numeroCanonico,
+        nome: nomeUsuario,
+        texto: message.body,
+        tipo: resultado.tipo,
+      })
+      .catch((error) =>
+        console.error("Falha ao registrar mensagem no estoque:", error),
+      );
+
     // -----------------------------
     //            GASTO
     // -----------------------------
@@ -79,6 +101,35 @@ export async function handleMessage(
         descricao: resultado.descricao,
         usuarioId: usuario.id,
       });
+    }
+
+    // -----------------------------
+    //           SUGESTAO
+    // -----------------------------
+    if (resultado.tipo === "sugestao") {
+      // Segurança extra: só tratamos como sugestão se a mensagem realmente
+      // começar com o comando, mesmo que a IA classifique errado.
+      if (!message.body.trim().toLowerCase().startsWith("/sugestao")) {
+        await client.sendText(numUsuario, sortearResposta("outro"));
+        return;
+      }
+
+      if (!resultado.descricao) {
+        await client.sendText(
+          numUsuario,
+          "Faltou escrever a sugestão junto, tipo: /sugestao sua ideia aqui",
+        );
+        return;
+      }
+
+      await sugestoesService.create({
+        numero: numeroCanonico,
+        nome: nomeUsuario,
+        texto: resultado.descricao,
+      });
+
+      await client.sendText(numUsuario, sortearResposta("sugestao"));
+      return;
     }
 
     // -----------------------------

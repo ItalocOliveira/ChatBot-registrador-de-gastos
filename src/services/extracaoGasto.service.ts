@@ -32,7 +32,22 @@ TIPOS:
 
 7. "resumo" — o usuário está pedindo um resumo, total ou lista dos gastos (ex: "quanto eu gastei esse mês", "me manda o resumo", "quanto já gastei", "total de gastos").
    - valor, categoria, descricao: null.
-   - Você NÃO tem acesso aos valores reais gastos pelo usuário, então NÃO invente números.`;
+   - Você NÃO tem acesso aos valores reais gastos pelo usuário, então NÃO invente números.
+
+8. "sugestao" — SOMENTE quando a mensagem começar literalmente com "/sugestao" (case-insensitive). Nunca classifique como "sugestao" uma mensagem que fale sobre melhorias/funções/ideias mas não comece com esse comando exato — nesse caso use "outro".
+   Ex: "/sugestao adiciona a função de ver quais itens eu comprei ao invés de apenas a quantidade de registros"
+   - valor, categoria: null.
+   - descricao: o texto da sugestão, ou seja, a mensagem SEM o prefixo "/sugestao" (trim no resultado). Se não sobrar nada depois de remover o prefixo, descricao: null.
+
+9. "sugestao_mal_feita" — a mensagem parece claramente uma sugestão de melhoria pro bot (algo que o usuário quer que seja adicionado, mudado ou feito melhor) mas NÃO começa com o comando "/sugestao".
+   Ex: "vc deveria mostrar os itens que eu comprei, não só a quantidade", "seria legal se desse pra editar um gasto", "adiciona uma função de relatório por categoria"
+   - valor, categoria, descricao: null.
+
+10. "comando" — a mensagem é EXATAMENTE "/comandos" (case-insensitive, ignorando espaços nas pontas), sem nenhum texto além disso.
+    - valor, categoria, descricao: null.
+
+11. "comando_mal_feito" — a mensagem começa com "/comandos" (case-insensitive) mas tem algo escrito depois (ex: "/comandos gasto", "/comandos oi").
+    - valor, categoria, descricao: null.`;
 
 const SCHEMA_RESULTADO = {
   type: "object",
@@ -47,6 +62,10 @@ const SCHEMA_RESULTADO = {
         "agradecimento",
         "outro",
         "resumo",
+        "sugestao",
+        "sugestao_mal_feita",
+        "comando",
+        "comando_mal_feito",
       ],
       description: "Classificação da mensagem do usuário.",
     },
