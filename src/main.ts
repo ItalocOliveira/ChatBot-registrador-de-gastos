@@ -17,6 +17,7 @@ const sugestoesService = new SugestoesService(new SugestoesRepository());
 
 create({
   session: process.env.WPP_SESSION || "default",
+  browserArgs: ["--no-sandbox", "--disable-setuid-sandbox"],
 })
   .then((client: Whatsapp): Promise<void> => start(client))
   .catch((error) => {
