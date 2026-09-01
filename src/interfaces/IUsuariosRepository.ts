@@ -1,4 +1,4 @@
-import { Usuario } from "../../app/generated/prisma/client";
+import { Usuario } from "../generated/prisma/client";
 
 export interface CreateUsuarioDto {
   numero: string;

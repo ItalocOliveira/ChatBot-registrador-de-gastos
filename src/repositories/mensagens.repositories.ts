@@ -1,4 +1,4 @@
-import { Mensagem } from "../../app/generated/prisma/client";
+import { Mensagem } from "../generated/prisma/client";
 import {
   CreateMensagemDto,
   IMensagensRepository,

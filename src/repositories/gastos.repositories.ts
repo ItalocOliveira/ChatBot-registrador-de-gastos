@@ -1,4 +1,4 @@
-import { Gasto } from "../../app/generated/prisma/client";
+import { Gasto } from "../generated/prisma/client";
 import {
   CreateGastoDto,
   IGastosRepository,

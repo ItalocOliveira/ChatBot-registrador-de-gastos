@@ -1,4 +1,4 @@
-import { Sugestao } from "../../app/generated/prisma/client";
+import { Sugestao } from "../generated/prisma/client";
 import {
   CreateSugestaoDto,
   ISugestoesRepository,
