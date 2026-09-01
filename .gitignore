@@ -8,6 +8,9 @@ userDataDir/
 # Recriada com 'npm install'
 node_modules/
 
+# Saída da compilação TypeScript (recriada com 'npm run build')
+dist/
+
 # Arquivos de ambiente com senhas e segredos
 # Contém informações sensíveis
 .env
@@ -25,7 +28,7 @@ npm-debug.log
 /WhatsAppImages
 /uploads
 *.png
-/app/generated/prisma
+/src/generated/prisma
 
 # Configuração local de ferramentas de IA (Claude Code, Windsurf, etc)
 .agents/

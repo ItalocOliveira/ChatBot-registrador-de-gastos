@@ -5,7 +5,7 @@
 
 generator client {
   provider = "prisma-client"
-  output   = "../app/generated/prisma"
+  output   = "../src/generated/prisma"
 }
 
 datasource db {
@@ -21,5 +21,46 @@ model Gasto {
 
   createdAt DateTime @default(now())
 
+  usuarioId String
+  usuario Usuario @relation(fields: [usuarioId], references: [id])
+
   @@map("gastos")
-} 
+}
+
+model Usuario {
+
+  id String @id @unique @default(uuid())
+
+  numero String @unique
+  nome String?
+
+  gastos Gasto[]
+
+  @@map("usuarios")
+}
+
+model Mensagem {
+  id String @id @unique @default(uuid())
+
+  numero String
+  nome String?
+  texto String
+  tipo String?
+
+  createdAt DateTime @default(now())
+
+  @@map("mensagens")
+}
+
+model Sugestao {
+  id String @id @unique @default(uuid())
+
+  numero String
+  nome String?
+  texto String
+
+  createdAt DateTime @default(now())
+
+  @@map("sugestoes")
+}
+

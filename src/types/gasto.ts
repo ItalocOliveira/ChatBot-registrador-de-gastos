@@ -5,7 +5,11 @@ export type TipoMensagem =
   | "saudacao"
   | "agradecimento"
   | "outro"
-  | "resumo";
+  | "resumo"
+  | "sugestao"
+  | "sugestao_mal_feita"
+  | "comando"
+  | "comando_mal_feito";
 
 export interface ResultadoExtracao {
   tipo: TipoMensagem;
